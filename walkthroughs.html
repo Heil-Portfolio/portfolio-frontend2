@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Walkthroughs — PORTFOLIO.SYS</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+  <style>
+    .wt-card { border:1px solid var(--border); border-radius:var(--radius-lg); background:var(--bg2); overflow:hidden; transition:border-color 0.15s; }
+    .wt-card:hover { border-color:var(--border2); }
+    .wt-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; cursor:pointer; gap:12px; }
+    .wt-body { display:none; padding:0 20px 20px; border-top:1px solid var(--border); }
+    .wt-body.open { display:block; }
+    .wt-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:16px 0; }
+    .filter-btn { font-family:var(--font-mono); font-size:11px; padding:5px 14px; border-radius:4px; border:1px solid var(--border); color:var(--muted); background:var(--bg2); cursor:pointer; transition:all 0.15s; }
+    .filter-btn:hover { border-color:var(--border2); color:var(--text); }
+    .filter-btn.active { border-color:var(--green); color:var(--green); background:var(--green-dim); }
+    @media(max-width:600px){ .wt-grid{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+<div id="topbar"></div>
+<main class="page">
+  <div id="section-header"></div>
+  <div style="display:flex;gap:8px;margin-bottom:20px;">
+    <button class="filter-btn active" data-filter="" onclick="setFilter(this,'')">All</button>
+    <button class="filter-btn" data-filter="published" onclick="setFilter(this,'published')">Published</button>
+    <button class="filter-btn" data-filter="draft" onclick="setFilter(this,'draft')">Draft</button>
+    <button class="filter-btn" data-filter="planned" onclick="setFilter(this,'planned')">Planned</button>
+  </div>
+  <div id="wt-list" style="display:flex;flex-direction:column;gap:10px;">
+    <div class="panel"><div class="skeleton" style="height:56px"></div></div>
+    <div class="panel"><div class="skeleton" style="height:56px"></div></div>
+  </div>
+</main>
+<div id="footer-wrap"></div>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/ui.js"></script>
+<script>
+  document.getElementById('topbar').innerHTML = UI.topbar('walkthroughs');
+  document.getElementById('footer-wrap').innerHTML = UI.footer();
+  document.getElementById('section-header').innerHTML = UI.sectionHeader('▷','Walkthroughs','documented deployments & experiments');
+  UI.startClock();
+
+  let allData=[], openSlug=null, currentFilter='', detailCache={};
+
+  function setFilter(btn,f){
+    currentFilter=f;
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.toggle('active',b===btn));
+    render();
+  }
+
+  function toggle(slug){
+    openSlug = openSlug===slug ? null : slug;
+    render();
+    if(openSlug && !detailCache[openSlug]) loadDetail(openSlug);
+  }
+
+  async function loadDetail(slug){
+    try{ detailCache[slug]=await API.walkthroughs.one(slug); render(); }catch(e){}
+  }
+
+  function render(){
+    const list=document.getElementById('wt-list');
+    const data=currentFilter ? allData.filter(w=>w.status===currentFilter) : allData;
+    if(!data.length){ list.innerHTML=UI.empty('Aucun walkthrough'); return; }
+    const borderCol = s => s==='published'?'var(--green)':s==='draft'?'var(--yellow)':'var(--border)';
+    list.innerHTML = data.map(w=>{
+      const isOpen=openSlug===w.slug;
+      const d=detailCache[w.slug];
+      return `
+        <div class="wt-card" style="border-left:3px solid ${borderCol(w.status)}">
+          <div class="wt-header" onclick="toggle('${w.slug}')">
+            <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0;">
+              <span style="font-family:var(--font-mono);color:var(--green);font-size:14px;">${isOpen?'▼':'▶'}</span>
+              <span style="font-family:var(--font-mono);font-size:13px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${w.title}</span>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;flex-shrink:0;">
+              ${UI.tags(w.tags.slice(0,3))}
+              <span class="tag tag-${w.status==='published'?'green':w.status==='draft'?'yellow':''}">${w.status.toUpperCase()}</span>
+              ${w.reading_time?`<span style="font-family:var(--font-mono);font-size:10px;color:var(--muted)">${w.reading_time}min</span>`:''}
+            </div>
+          </div>
+          <div class="wt-body ${isOpen?'open':''}">
+            <div class="wt-grid">
+              <div>
+                <span class="panel-label">// objective</span>
+                <p style="font-size:13px;color:var(--text);line-height:1.6;">${w.objective||'—'}</p>
+              </div>
+              <div>
+                <span class="panel-label">// stack</span>
+                <p style="font-size:13px;color:var(--text);">${w.stack||'—'}</p>
+              </div>
+            </div>
+            ${w.architecture?`<span class="panel-label">// architecture</span><div class="code-block" style="margin-bottom:16px;">${w.architecture}</div>`:''}
+            ${w.lessons_learned?.length?`
+              <span class="panel-label">// lessons learned</span>
+              <ul style="margin-bottom:16px;">${w.lessons_learned.map(l=>`
+                <li style="display:flex;gap:10px;font-size:13px;color:var(--text);padding:4px 0;">
+                  <span style="color:var(--green);flex-shrink:0;">→</span>${l}
+                </li>`).join('')}
+              </ul>`:''}
+            ${d?.content?`
+              <span class="panel-label">// content</span>
+              <div style="font-size:13px;color:var(--text);line-height:1.8;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:16px;white-space:pre-wrap;">${d.content.slice(0,1200)}${d.content.length>1200?'\n\n[...]':''}</div>
+            `:isOpen&&!d?`<div style="font-family:var(--font-mono);font-size:11px;color:var(--muted);padding:8px 0;">Chargement...</div>`:''}
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  async function init(){
+    try{ allData=await API.walkthroughs.all(); render(); }
+    catch(e){ document.getElementById('wt-list').innerHTML=UI.error(); }
+  }
+  init();
+</script>
+</body>
+</html>

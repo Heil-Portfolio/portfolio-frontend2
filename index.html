@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PORTFOLIO.SYS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<div id="topbar"></div>
+
+<main class="page" style="min-height:calc(100vh - 80px); display:flex; flex-direction:column; justify-content:center;">
+
+  <!-- Status bar -->
+  <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:40px;">
+    <div class="panel" style="padding:6px 14px; display:flex; align-items:center; gap:8px;">
+      <span class="dot dot-green"></span>
+      <span style="font-family:var(--font-mono); font-size:11px; color:var(--muted)">SYS</span>
+      <span style="font-family:var(--font-mono); font-size:11px; color:var(--green)">ONLINE</span>
+    </div>
+    <div class="panel" style="padding:6px 14px; display:flex; align-items:center; gap:8px;">
+      <span style="font-family:var(--font-mono); font-size:11px; color:var(--muted)">MODE</span>
+      <span style="font-family:var(--font-mono); font-size:11px; color:var(--purple)">LEARNING</span>
+    </div>
+    <div class="panel" style="padding:6px 14px; display:flex; align-items:center; gap:8px;">
+      <span style="font-family:var(--font-mono); font-size:11px; color:var(--muted)">ENV</span>
+      <span style="font-family:var(--font-mono); font-size:11px; color:var(--blue)">PRODUCTION</span>
+    </div>
+  </div>
+
+  <!-- Prompt line -->
+  <div style="font-family:var(--font-mono); color:var(--muted); font-size:13px; margin-bottom:8px;">
+    root@portfolio:~$ whoami
+  </div>
+
+  <!-- Name -->
+  <h1 style="font-family:var(--font-mono); font-size:clamp(48px,8vw,88px); font-weight:700; color:#fff; line-height:1; margin-bottom:8px; letter-spacing:-0.02em;">
+    <span id="name-display"></span><span class="cursor" style="color:var(--green)">_</span>
+  </h1>
+
+  <!-- Role -->
+  <div style="margin-bottom:32px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+    <span style="font-family:var(--font-sans); font-size:20px; color:var(--blue); font-weight:300;">
+      Backend &amp; DevSecOps Engineer
+    </span>
+    <span class="tag tag-yellow" style="font-size:11px; padding:3px 10px;">IN PROGRESS</span>
+  </div>
+
+  <!-- Vision -->
+  <div class="panel" style="max-width:580px; border-left:3px solid var(--green); border-radius:0 var(--radius-lg) var(--radius-lg) 0; margin-bottom:36px;">
+    <span style="font-family:var(--font-mono); color:var(--muted); font-size:10px;">// vision</span>
+    <p style="font-family:var(--font-sans); color:var(--text); font-size:15px; margin-top:8px; line-height:1.7;" id="vision-text"></p>
+  </div>
+
+  <!-- Stack tags -->
+  <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:48px;" id="stack-tags"></div>
+
+  <!-- Quick links -->
+  <div style="display:flex; gap:12px; flex-wrap:wrap;">
+    <a href="projects.html" class="panel" style="padding:10px 20px; display:flex; align-items:center; gap:8px; border-color:var(--green); transition:background 0.15s;"
+       onmouseover="this.style.background='var(--green-dim)'" onmouseout="this.style.background=''">
+      <span style="font-family:var(--font-mono); font-size:12px; color:var(--green)">→ Projects</span>
+    </a>
+    <a href="walkthroughs.html" class="panel" style="padding:10px 20px; display:flex; align-items:center; gap:8px; transition:background 0.15s;"
+       onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''">
+      <span style="font-family:var(--font-mono); font-size:12px; color:var(--muted2)">→ Walkthroughs</span>
+    </a>
+    <a href="journal.html" class="panel" style="padding:10px 20px; display:flex; align-items:center; gap:8px; transition:background 0.15s;"
+       onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''">
+      <span style="font-family:var(--font-mono); font-size:12px; color:var(--muted2)">→ Journal</span>
+    </a>
+  </div>
+
+</main>
+
+<div id="footer-wrap"></div>
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/ui.js"></script>
+<script>
+  // Render topbar + footer
+  document.getElementById('topbar').innerHTML = UI.topbar('index');
+  document.getElementById('footer-wrap').innerHTML = UI.footer();
+  UI.startClock();
+
+  // Typewriter
+  function typewriter(el, text, speed = 40) {
+    let i = 0;
+    el.textContent = '';
+    const id = setInterval(() => {
+      el.textContent += text[i++];
+      if (i >= text.length) clearInterval(id);
+    }, speed);
+  }
+
+  const NAME    = 'Heil';
+  const VISION  = 'Building scalable systems. Learning in public. Shipping with intent.';
+  const STACK   = ['Django', 'Spring Boot', 'Docker', 'Linux', 'AWS', 'CI/CD', 'PostgreSQL'];
+
+  typewriter(document.getElementById('name-display'), NAME, 80);
+
+  setTimeout(() => {
+    typewriter(document.getElementById('vision-text'), VISION, 30);
+  }, NAME.length * 80 + 200);
+
+  // Stack tags
+  const colors = ['green', 'blue', 'purple', 'yellow', 'green', 'blue', 'purple'];
+  document.getElementById('stack-tags').innerHTML =
+    STACK.map((t, i) => `<span class="tag tag-${colors[i % colors.length]}">${t}</span>`).join('');
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects — PORTFOLIO.SYS</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+  <style>
+    .project-list { display:flex; flex-direction:column; gap:8px; }
+    .project-item {
+      padding:14px 16px; cursor:pointer;
+      border:1px solid var(--border); border-radius:var(--radius-lg);
+      background:var(--bg2); transition:border-color 0.15s, background 0.15s;
+    }
+    .project-item:hover { border-color:var(--border2); background:var(--bg3); }
+    .project-item.active { border-color:#00ff9f66; background:#00ff9f0a; }
+    .detail-wrap { position:sticky; top:60px; }
+  </style>
+</head>
+<body>
+<div id="topbar"></div>
+
+<main class="page">
+  <div id="section-header"></div>
+  <div style="display:grid; grid-template-columns:280px 1fr; gap:20px;" id="layout">
+
+    <div id="project-list" class="project-list">
+      <div class="panel"><div class="skeleton" style="height:60px;margin-bottom:8px"></div></div>
+      <div class="panel"><div class="skeleton" style="height:60px;margin-bottom:8px"></div></div>
+    </div>
+
+    <div class="detail-wrap">
+      <div id="project-detail" class="panel" style="min-height:300px;">
+        <div style="color:var(--muted);font-family:var(--font-mono);font-size:13px;padding:40px;text-align:center;">
+          ← Sélectionne un projet
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="footer-wrap"></div>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/ui.js"></script>
+<script>
+  document.getElementById('topbar').innerHTML = UI.topbar('projects');
+  document.getElementById('footer-wrap').innerHTML = UI.footer();
+  document.getElementById('section-header').innerHTML = UI.sectionHeader('◧', 'Projects', 'backend & infrastructure work');
+  UI.startClock();
+
+  let projects = [];
+  let activeSlug = null;
+
+  function renderList() {
+    const list = document.getElementById('project-list');
+    if (!projects.length) { list.innerHTML = UI.empty('Aucun projet'); return; }
+    list.innerHTML = projects.map(p => `
+      <div class="project-item ${p.slug === activeSlug ? 'active' : ''}"
+           onclick="selectProject('${p.slug}')">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+          <span style="font-family:var(--font-mono);font-size:13px;color:${p.slug===activeSlug?'var(--green)':'var(--text)'}">
+            ${p.name}
+          </span>
+          <span style="font-family:var(--font-mono);font-size:9px;color:${
+            p.status==='active'?'var(--green)':p.status==='completed'?'var(--blue)':'var(--yellow)'
+          }">● ${p.status}</span>
+        </div>
+        <span style="font-size:11px;color:var(--muted)">${p.type}</span>
+      </div>
+    `).join('');
+  }
+
+  function renderDetail(slug) {
+    const p = projects.find(x => x.slug === slug);
+    if (!p) return;
+    document.getElementById('project-detail').innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;flex-wrap:wrap;gap:8px;">
+        <div>
+          <h2 style="font-family:var(--font-mono);color:var(--green);font-size:22px;margin-bottom:4px;">${p.name}</h2>
+          <span style="color:var(--muted);font-size:13px;">${p.type}</span>
+        </div>
+        <span class="tag tag-${p.status==='active'?'green':p.status==='completed'?'blue':'yellow'}" style="font-size:12px;padding:4px 12px;">
+          ${p.status.toUpperCase()}
+        </span>
+      </div>
+
+      <p style="font-size:14px;color:var(--text);line-height:1.7;margin-bottom:20px;">${p.description}</p>
+
+      ${p.architecture ? `
+        <span class="panel-label">// architecture</span>
+        <div class="code-block" style="margin-bottom:20px;">${p.architecture}</div>
+      ` : ''}
+
+      <span class="panel-label">// stack</span>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+        ${UI.tags(p.stack, 'blue')}
+      </div>
+
+      ${p.highlights?.length ? `
+        <span class="panel-label">// highlights</span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+          ${UI.tags(p.highlights, 'purple')}
+        </div>
+      ` : ''}
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;">
+        ${p.github_url ? `<a href="${p.github_url}" target="_blank" class="tag tag-green">↗ GitHub</a>` : ''}
+        ${p.live_url   ? `<a href="${p.live_url}"   target="_blank" class="tag tag-blue">↗ Live</a>`   : ''}
+      </div>
+    `;
+  }
+
+  function selectProject(slug) {
+    activeSlug = slug;
+    renderList();
+    renderDetail(slug);
+  }
+
+  async function init() {
+    try {
+      projects = await API.projects.all();
+      renderList();
+      if (projects.length) selectProject(projects[0].slug);
+    } catch(e) {
+      document.getElementById('project-list').innerHTML = UI.error();
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Labs — PORTFOLIO.SYS</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<div id="topbar"></div>
+<main class="page">
+  <div id="section-header"></div>
+  <div class="grid-3" id="labs-grid">
+    <div class="panel"><div class="skeleton" style="height:120px"></div></div>
+    <div class="panel"><div class="skeleton" style="height:120px"></div></div>
+    <div class="panel"><div class="skeleton" style="height:120px"></div></div>
+  </div>
+</main>
+<div id="footer-wrap"></div>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/ui.js"></script>
+<script>
+  document.getElementById('topbar').innerHTML = UI.topbar('labs');
+  document.getElementById('footer-wrap').innerHTML = UI.footer();
+  document.getElementById('section-header').innerHTML = UI.sectionHeader('⚗','Labs','experiments & technical spikes');
+  UI.startClock();
+
+  function tagColor(tag){
+    const map={Docker:'blue',AWS:'yellow',Linux:'green',Python:'blue',Django:'green',Nginx:'purple','CI/CD':'yellow',Redis:'red',Spring:'green'};
+    return map[tag]||'';
+  }
+
+  async function init(){
+    try{
+      const data = await API.labs.all();
+      const grid = document.getElementById('labs-grid');
+      if(!data.length){ grid.innerHTML=UI.empty('Aucun lab pour l\'instant'); return; }
+      grid.innerHTML = data.map(l=>`
+        <div class="panel" style="display:flex;flex-direction:column;gap:14px;border-top:2px solid ${
+          l.status==='done'?'var(--green)':l.status==='in_progress'?'var(--yellow)':'var(--border)'
+        }">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="tag tag-${tagColor(l.tag)}">${l.tag}</span>
+            <span style="font-family:var(--font-mono);font-size:10px;color:${
+              l.status==='done'?'var(--green)':l.status==='in_progress'?'var(--yellow)':'var(--muted)'
+            }">
+              ${UI.statusDot(l.status)}${l.status}
+            </span>
+          </div>
+          <span style="font-family:var(--font-sans);font-size:13px;color:var(--text);font-weight:500;">${l.name}</span>
+          ${l.description?`<p style="font-size:12px;color:var(--muted2);line-height:1.5;">${l.description}</p>`:''}
+          ${l.result?`
+            <div style="border-top:1px solid var(--border);padding-top:10px;">
+              <span class="panel-label">// result</span>
+              <p style="font-size:12px;color:var(--green);">${l.result}</p>
+            </div>`:''}
+        </div>
+      `).join('');
+    }catch(e){
+      document.getElementById('labs-grid').innerHTML=UI.error();
+    }
+  }
+  init();
+</script>
+</body>
+</html>

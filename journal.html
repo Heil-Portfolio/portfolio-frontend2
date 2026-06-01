@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journal — PORTFOLIO.SYS</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+  <style>
+    .entry-card { border:1px solid var(--border); border-radius:var(--radius-lg); background:var(--bg2); overflow:hidden; cursor:pointer; transition:border-color 0.15s; }
+    .entry-card:hover { border-color:var(--border2); }
+    .entry-header { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; gap:12px; }
+    .entry-body { display:none; padding:0 20px 20px; border-top:1px solid var(--border); }
+    .entry-body.open { display:block; }
+  </style>
+</head>
+<body>
+<div id="topbar"></div>
+<main class="page">
+  <div id="section-header"></div>
+  <div id="journal-list" style="display:flex;flex-direction:column;gap:10px;">
+    <div class="panel"><div class="skeleton" style="height:56px"></div></div>
+    <div class="panel"><div class="skeleton" style="height:56px"></div></div>
+    <div class="panel"><div class="skeleton" style="height:56px"></div></div>
+  </div>
+</main>
+<div id="footer-wrap"></div>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/ui.js"></script>
+<script>
+  document.getElementById('topbar').innerHTML = UI.topbar('journal');
+  document.getElementById('footer-wrap').innerHTML = UI.footer();
+  document.getElementById('section-header').innerHTML = UI.sectionHeader('✎','Learning Journal','notes, bugs & discoveries');
+  UI.startClock();
+
+  let openSlug = null;
+
+  function toggle(slug){
+    openSlug = openSlug===slug ? null : slug;
+    render(window._journalData);
+  }
+
+  function render(data){
+    const list = document.getElementById('journal-list');
+    if(!data?.length){ list.innerHTML=UI.empty('Aucune entrée pour l\'instant'); return; }
+    list.innerHTML = data.map(e=>{
+      const isOpen = openSlug===e.slug;
+      return `
+        <div class="entry-card" onclick="toggle('${e.slug}')">
+          <div class="entry-header">
+            <div style="min-width:0;">
+              <span style="font-family:var(--font-mono);color:var(--muted);font-size:10px;display:block;margin-bottom:4px;">${e.entry_date}</span>
+              <span style="font-family:var(--font-sans);color:var(--text);font-size:14px;font-weight:500;">${e.title}</span>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
+              ${UI.tags(e.tags.slice(0,3),'purple')}
+              <span style="font-family:var(--font-mono);color:var(--muted);font-size:12px;">${isOpen?'▼':'▶'}</span>
+            </div>
+          </div>
+          <div class="entry-body ${isOpen?'open':''}">
+            <div style="font-size:13px;color:var(--text);line-height:1.8;white-space:pre-wrap;padding-top:16px;">${e.content}</div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  async function init(){
+    try{
+      const data = await API.journal.all();
+      window._journalData = data;
+      render(data);
+    }catch(e){
+      document.getElementById('journal-list').innerHTML=UI.error();
+    }
+  }
+  init();
+</script>
+</body>
+</html>

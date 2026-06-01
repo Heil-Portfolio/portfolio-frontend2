@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roadmap — PORTFOLIO.SYS</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<div id="topbar"></div>
+<main class="page">
+  <div id="section-header"></div>
+  <div class="grid-3" id="roadmap-grid">
+    <div class="panel"><div class="skeleton" style="height:200px"></div></div>
+    <div class="panel"><div class="skeleton" style="height:200px"></div></div>
+    <div class="panel"><div class="skeleton" style="height:200px"></div></div>
+  </div>
+</main>
+<div id="footer-wrap"></div>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/ui.js"></script>
+<script>
+  document.getElementById('topbar').innerHTML = UI.topbar('roadmap');
+  document.getElementById('footer-wrap').innerHTML = UI.footer();
+  document.getElementById('section-header').innerHTML = UI.sectionHeader('⟶','Roadmap','technical objectives across time');
+  UI.startClock();
+
+  const HORIZONS = [
+    { key:'short',  label:'Short Term',  color:'var(--green)',  tag:'tag-green'  },
+    { key:'medium', label:'Medium Term', color:'var(--blue)',   tag:'tag-blue'   },
+    { key:'long',   label:'Long Term',   color:'var(--purple)', tag:'tag-purple' },
+  ];
+
+  async function init(){
+    try{
+      const data = await API.roadmap.byHorizon();
+      const grid = document.getElementById('roadmap-grid');
+      grid.innerHTML = HORIZONS.map(h=>{
+        const items = data[h.key]||[];
+        const done  = items.filter(i=>i.done).length;
+        return `
+          <div class="panel" style="border-top:3px solid ${h.color}">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <span style="font-family:var(--font-mono);color:${h.color};font-size:13px;font-weight:700;">${items[0]?.target_date||h.label}</span>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="tag ${h.tag}">${h.label}</span>
+                ${items.length?`<span style="font-family:var(--font-mono);font-size:10px;color:var(--muted)">${done}/${items.length}</span>`:''}
+              </div>
+            </div>
+            ${items.length ? items.map(item=>`
+              <div style="display:flex;gap:12px;margin-bottom:12px;align-items:flex-start;">
+                <span style="flex-shrink:0;width:16px;height:16px;border-radius:50%;
+                  border:2px solid ${item.done?h.color:'var(--muted)'};
+                  background:${item.done?h.color:'transparent'};
+                  display:flex;align-items:center;justify-content:center;
+                  font-size:9px;color:var(--bg);margin-top:2px;">
+                  ${item.done?'✓':''}
+                </span>
+                <span style="font-size:13px;color:${item.done?'var(--muted)':'var(--text)'};
+                  text-decoration:${item.done?'line-through':'none'};line-height:1.4;">
+                  ${item.title}
+                </span>
+              </div>`).join('')
+            : `<div style="font-family:var(--font-mono);font-size:12px;color:var(--muted);text-align:center;padding:20px 0;">— à définir —</div>`}
+          </div>`;
+      }).join('');
+    }catch(e){
+      document.getElementById('roadmap-grid').innerHTML=UI.error();
+    }
+  }
+  init();
+</script>
+</body>
+</html>
