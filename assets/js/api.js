@@ -2,10 +2,9 @@
 // Modifier BASE_URL selon ton environnement
 
 const API = (() => {
-  /*const BASE_URL = window.location.hostname === 'localhost'
+  const BASE_URL = window.location.hostname === 'localhost'
     ? 'http://localhost:8000/api'
-    : 'https://your-app.onrender.com/api'; // ← remplacer en prod*/
-    const BASE_URL = 'http://localhost:8000/api';
+    : 'https://portfolio-backend-3qxp.onrender.com/api'; // ← remplacer en prod
 
   async function get(endpoint) {
     const res = await fetch(`${BASE_URL}${endpoint}`);
