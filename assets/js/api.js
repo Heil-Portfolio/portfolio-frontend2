@@ -9,7 +9,12 @@ const API = (() => {
   async function get(endpoint) {
     const res = await fetch(`${BASE_URL}${endpoint}`);
     if (!res.ok) throw new Error(`API error ${res.status}: ${endpoint}`);
-    return res.json();
+    const data = await res.json();
+    // DRF pagine les listes ({count, next, previous, results}) : on déballe results
+    if (data && typeof data === 'object' && !Array.isArray(data) && Array.isArray(data.results)) {
+      return data.results;
+    }
+    return data;
   }
 
   return {
