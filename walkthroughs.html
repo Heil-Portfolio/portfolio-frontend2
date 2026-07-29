@@ -100,9 +100,9 @@
                   <span style="color:var(--green);flex-shrink:0;">→</span>${l}
                 </li>`).join('')}
               </ul>`:''}
-            ${d?.content?`
+            ${d?.content_html?`
               <span class="panel-label">// content</span>
-              <div style="font-size:13px;color:var(--text);line-height:1.8;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:16px;white-space:pre-wrap;">${d.content.slice(0,1200)}${d.content.length>1200?'\n\n[...]':''}</div>
+              <div class="md-content">${d.content_html}</div>
             `:isOpen&&!d?`<div style="font-family:var(--font-mono);font-size:11px;color:var(--muted);padding:8px 0;">Chargement...</div>`:''}
           </div>
         </div>`;
