@@ -6,10 +6,10 @@ const UI = {
   topbar(activePage) {
     const nav = [
       ['index',        '~'],
-      ['skills',       'Skills'],
+      ['about',        'About'],
       ['projects',     'Projects'],
       ['walkthroughs', 'Walkthroughs'],
-      ['labs',         'Labs'],
+      ['skills',       'Skills'],
       ['journal',      'Journal'],
       ['roadmap',      'Roadmap'],
     ];
@@ -36,6 +36,9 @@ const UI = {
       <footer class="footer">
         <span>© ${now.getFullYear()} — portfolio.sys</span>
         <div class="footer-right">
+          <a href="https://github.com/HEIL-TCHAMBA-NANA" target="_blank" style="color:var(--muted2)">GitHub</a>
+          <a href="mailto:htchamba124@gmail.com" style="color:var(--muted2)">Email</a>
+          <a href="assets/cv.pdf" target="_blank" style="color:var(--green)">↓ CV</a>
           <span id="footer-clock"></span>
           <span>v0.1.0</span>
         </div>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — PORTFOLIO.SYS</title>
+  <link rel="icon" type="image/png" href="favicon.ico">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<div id="topbar"></div>
+
+<main class="page">
+  <div id="section-header"></div>
+
+  <div style="display:grid; grid-template-columns:1fr 320px; gap:24px;" id="about-layout">
+
+    <!-- Main column -->
+    <div style="display:flex; flex-direction:column; gap:20px;">
+
+      <div class="panel">
+        <span class="panel-label">// bio</span>
+        <p style="font-size:14px; color:var(--text); line-height:1.8;">
+          I'm a Master&nbsp;2 Computer Science student at
+          <strong style="color:#fff">Université de Yaoundé&nbsp;I</strong> (Cameroon), specializing in
+          <strong style="color:#fff">distributed systems</strong> and
+          <strong style="color:#fff">secure software architecture</strong>. I'm currently completing an
+          internship at <strong style="color:#fff">K&amp;B GROUP</strong> as an application developer, working
+          hands-on across backend services and infrastructure.
+        </p>
+        <p style="font-size:14px; color:var(--text); line-height:1.8; margin-top:14px;">
+          My long-term goal is to become a <strong style="color:var(--green)">DevSecOps Engineer</strong>,
+          focused on cloud infrastructure and security — building systems that are not only scalable, but
+          safe by design. This portfolio documents that path: real projects, deployment walkthroughs, and
+          the notes/experiments along the way.
+        </p>
+      </div>
+
+      <div class="panel">
+        <span class="panel-label">// education</span>
+        <div style="display:flex; gap:14px; align-items:flex-start;">
+          <span style="color:var(--green); font-family:var(--font-mono); font-size:13px; margin-top:2px;">▸</span>
+          <div>
+            <div style="font-size:14px; color:#fff; font-weight:500;">Master 2, Computer Science</div>
+            <div style="font-size:12px; color:var(--muted2); margin-top:2px;">Université de Yaoundé I — Distributed Systems &amp; Secure Software Architecture</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <span class="panel-label">// current role</span>
+        <div style="display:flex; gap:14px; align-items:flex-start;">
+          <span style="color:var(--blue); font-family:var(--font-mono); font-size:13px; margin-top:2px;">▸</span>
+          <div>
+            <div style="font-size:14px; color:#fff; font-weight:500;">Application Developer — Intern</div>
+            <div style="font-size:12px; color:var(--muted2); margin-top:2px;">K&amp;B GROUP</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" style="border-left:3px solid var(--purple); border-radius:0 var(--radius-lg) var(--radius-lg) 0;">
+        <span class="panel-label">// focus areas</span>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+          <span class="tag tag-green">Backend Engineering</span>
+          <span class="tag tag-blue">Cloud &amp; Infrastructure</span>
+          <span class="tag tag-purple">DevSecOps</span>
+          <span class="tag tag-yellow">Distributed Systems</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Side column -->
+    <div style="display:flex; flex-direction:column; gap:20px;">
+      <div class="panel">
+        <span class="panel-label">// info</span>
+        <div style="display:flex; flex-direction:column; gap:10px; font-family:var(--font-mono); font-size:12px;">
+          <div style="display:flex; justify-content:space-between;">
+            <span style="color:var(--muted)">location</span>
+            <span style="color:var(--text)">Cameroon</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span style="color:var(--muted)">languages</span>
+            <span style="color:var(--text)">FR (native) / EN (pro)</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span style="color:var(--muted)">status</span>
+            <span style="color:var(--green)">open to opportunities</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <span class="panel-label">// contact</span>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <a href="mailto:htchamba124@gmail.com" class="tag tag-green" style="text-align:center; padding:8px 0; font-size:12px;">
+            ✉ htchamba124@gmail.com
+          </a>
+          <a href="https://github.com/HEIL-TCHAMBA-NANA" target="_blank" class="tag tag-blue" style="text-align:center; padding:8px 0; font-size:12px;">
+            ↗ github.com/HEIL-TCHAMBA-NANA
+          </a>
+          <a href="assets/cv.pdf" target="_blank" class="tag tag-purple" style="text-align:center; padding:8px 0; font-size:12px;">
+            ↓ Download CV
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div id="footer-wrap"></div>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/ui.js"></script>
+<script>
+  document.getElementById('topbar').innerHTML = UI.topbar('about');
+  document.getElementById('footer-wrap').innerHTML = UI.footer();
+  document.getElementById('section-header').innerHTML = UI.sectionHeader('◒', 'About', 'who\'s behind the terminal');
+  UI.startClock();
+
+  function applyResponsive() {
+    const layout = document.getElementById('about-layout');
+    layout.style.gridTemplateColumns = window.innerWidth < 760 ? '1fr' : '1fr 320px';
+  }
+  applyResponsive();
+  window.addEventListener('resize', applyResponsive);
+</script>
+</body>
+</html>
