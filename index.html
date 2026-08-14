@@ -32,6 +32,35 @@
   </div>
 </section>
 
+<div class="content">
+  <div class="panel">
+    <h2>Le déclic</h2>
+    <p>Master 2 en informatique à l'Université de Yaoundé I, spécialisation systèmes distribués et architecture logicielle sécurisée. Ce qui m'intéresse n'est jamais la fonctionnalité elle-même mais ce qui la maintient debout : la résilience, la sécurité, ce qui se passe quand tout casse à 3h du matin.</p>
+    <p>Aujourd'hui en stage développeur applicatif chez <span class="hl">K&B GROUP</span>, avec un objectif clair : devenir ingénieur DevSecOps.</p>
+    <div class="tags">
+      <span class="tag">Systèmes distribués</span>
+      <span class="tag">Architecture sécurisée</span>
+      <span class="tag">DevSecOps</span>
+      <span class="tag">Cameroun</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Le projet fil rouge</h2>
+    <p>La plupart de ce que je documente ici tourne autour d'un même projet réel : <span class="hl">DREAMHOUSE-237</span>, une plateforme immobilière en microservices polyglotte — 13 dépôts, Django, Spring Boot, Flask, NestJS, déployée sur AWS EC2 Free Tier. Pas un projet jouet : de vrais bugs, de vraies failles trouvées et corrigées, de vraies décisions d'architecture assumées ou regrettées.</p>
+  </div>
+
+  <div class="panel">
+    <h2>Repères</h2>
+    <div class="kv-grid">
+      <div class="kv"><div class="k">Base</div><div class="v">Yaoundé, Cameroun</div></div>
+      <div class="kv"><div class="k">Langues</div><div class="v">Français natif, anglais professionnel</div></div>
+      <div class="kv"><div class="k">Actuellement</div><div class="v">Stage développeur @ K&B GROUP</div></div>
+      <div class="kv"><div class="k">Cap</div><div class="v">Ingénieur DevSecOps</div></div>
+    </div>
+  </div>
+</div>
+
 <div id="thread-mount"></div>
 
 <div id="ui-footer"></div>
@@ -40,7 +69,7 @@
 <script>
   UI.mountChrome('index.html', 'origin');
   document.getElementById('thread-mount').outerHTML = UI.thread([
-    UI.threadCard('suite logique', 'Qui est derrière le terminal', 'Le parcours, la méthode, pourquoi ce projet fil rouge', 'about.html', 'forward')
+    UI.threadCard('suite logique', 'Ce que j\'ai construit avec tout ça', 'Walkthroughs techniques, déploiements réels, bugs résolus', 'walkthroughs.html', 'forward')
   ]);
 </script>
 </body>

@@ -8,7 +8,6 @@ const UI = {
   topbar(activePage) {
     const nav = [
       ['index.html',        'home'],
-      ['about.html',        'about'],
       ['walkthroughs.html', 'walkthroughs'],
       ['notes.html',        'notes'],
     ];
@@ -26,13 +25,12 @@ const UI = {
   },
 
   // ── PIPELINE — le fil conducteur du site ────────────────
-  // stage courant : 'origin' | 'profile' | 'build' | 'log'
+  // stage courant : 'origin' | 'build' | 'log'
   pipeline(currentStage) {
     const stages = [
-      ['origin',  'Origin',  'index.html'],
-      ['profile', 'Profile', 'about.html'],
-      ['build',   'Build',   'walkthroughs.html'],
-      ['log',     'Log',     'notes.html'],
+      ['origin', 'Origin', 'index.html'],
+      ['build',  'Build',  'walkthroughs.html'],
+      ['log',    'Log',    'notes.html'],
     ];
     const order = stages.map(s => s[0]);
     const currentIdx = order.indexOf(currentStage);
