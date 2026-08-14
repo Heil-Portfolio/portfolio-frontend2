@@ -1,129 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About — PORTFOLIO.SYS</title>
-  <link rel="icon" type="image/png" href="favicon.ico">
-  <link rel="stylesheet" href="assets/css/main.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Heil Tchamba Nana</title>
+<meta name="description" content="Le parcours de Heil Tchamba Nana : systèmes distribués, architecture sécurisée, et le projet fil rouge DREAMHOUSE-237.">
+<link rel="icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://portfolio-backend-3qxp.onrender.com/static/css/main.css" rel="stylesheet">
 </head>
 <body>
-<div id="topbar"></div>
 
-<main class="page">
-  <div id="section-header"></div>
+<div id="ui-topbar"></div>
+<div id="ui-pipeline"></div>
 
-  <div style="display:grid; grid-template-columns:1fr 320px; gap:24px;" id="about-layout">
+<section class="page-head">
+  <div class="terminal-line"><span class="prompt">$</span> cat about.md</div>
+  <h1>Le <span class="accent">pourquoi</span> avant le comment</h1>
+  <p class="lede">D'un intérêt pour les systèmes distribués à une conviction : la meilleure infra est celle qu'on ne remarque jamais.</p>
+</section>
 
-    <!-- Main column -->
-    <div style="display:flex; flex-direction:column; gap:20px;">
-
-      <div class="panel">
-        <span class="panel-label">// bio</span>
-        <p style="font-size:14px; color:var(--text); line-height:1.8;">
-          I'm a Master&nbsp;2 Computer Science student at
-          <strong style="color:#fff">Université de Yaoundé&nbsp;I</strong> (Cameroon), specializing in
-          <strong style="color:#fff">distributed systems</strong> and
-          <strong style="color:#fff">secure software architecture</strong>. I'm currently completing an
-          internship at <strong style="color:#fff">K&amp;B GROUP</strong> as an application developer, working
-          hands-on across backend services and infrastructure.
-        </p>
-        <p style="font-size:14px; color:var(--text); line-height:1.8; margin-top:14px;">
-          My long-term goal is to become a <strong style="color:var(--green)">DevSecOps Engineer</strong>,
-          focused on cloud infrastructure and security — building systems that are not only scalable, but
-          safe by design. This portfolio documents that path: real projects, deployment walkthroughs, and
-          the notes/experiments along the way.
-        </p>
-      </div>
-
-      <div class="panel">
-        <span class="panel-label">// education</span>
-        <div style="display:flex; gap:14px; align-items:flex-start;">
-          <span style="color:var(--green); font-family:var(--font-mono); font-size:13px; margin-top:2px;">▸</span>
-          <div>
-            <div style="font-size:14px; color:#fff; font-weight:500;">Master 2, Computer Science</div>
-            <div style="font-size:12px; color:var(--muted2); margin-top:2px;">Université de Yaoundé I — Distributed Systems &amp; Secure Software Architecture</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <span class="panel-label">// current role</span>
-        <div style="display:flex; gap:14px; align-items:flex-start;">
-          <span style="color:var(--blue); font-family:var(--font-mono); font-size:13px; margin-top:2px;">▸</span>
-          <div>
-            <div style="font-size:14px; color:#fff; font-weight:500;">Application Developer — Intern</div>
-            <div style="font-size:12px; color:var(--muted2); margin-top:2px;">K&amp;B GROUP</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel" style="border-left:3px solid var(--purple); border-radius:0 var(--radius-lg) var(--radius-lg) 0;">
-        <span class="panel-label">// focus areas</span>
-        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
-          <span class="tag tag-green">Backend Engineering</span>
-          <span class="tag tag-blue">Cloud &amp; Infrastructure</span>
-          <span class="tag tag-purple">DevSecOps</span>
-          <span class="tag tag-yellow">Distributed Systems</span>
-        </div>
-      </div>
-
+<div class="content">
+  <div class="panel">
+    <h2>Le déclic</h2>
+    <p>Master 2 en informatique à l'Université de Yaoundé I, spécialisation systèmes distribués et architecture logicielle sécurisée. Ce qui m'intéresse n'est jamais la fonctionnalité elle-même mais ce qui la maintient debout : la résilience, la sécurité, ce qui se passe quand tout casse à 3h du matin.</p>
+    <p>Aujourd'hui en stage développeur applicatif chez <span class="hl">K&B GROUP</span>, avec un objectif clair : devenir ingénieur DevSecOps.</p>
+    <div class="tags">
+      <span class="tag">Systèmes distribués</span>
+      <span class="tag">Architecture sécurisée</span>
+      <span class="tag">DevSecOps</span>
+      <span class="tag">Cameroun</span>
     </div>
-
-    <!-- Side column -->
-    <div style="display:flex; flex-direction:column; gap:20px;">
-      <div class="panel">
-        <span class="panel-label">// info</span>
-        <div style="display:flex; flex-direction:column; gap:10px; font-family:var(--font-mono); font-size:12px;">
-          <div style="display:flex; justify-content:space-between;">
-            <span style="color:var(--muted)">location</span>
-            <span style="color:var(--text)">Cameroon</span>
-          </div>
-          <div style="display:flex; justify-content:space-between;">
-            <span style="color:var(--muted)">languages</span>
-            <span style="color:var(--text)">FR (native) / EN (pro)</span>
-          </div>
-          <div style="display:flex; justify-content:space-between;">
-            <span style="color:var(--muted)">status</span>
-            <span style="color:var(--green)">open to opportunities</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <span class="panel-label">// contact</span>
-        <div style="display:flex; flex-direction:column; gap:10px;">
-          <a href="mailto:htchamba124@gmail.com" class="tag tag-green" style="text-align:center; padding:8px 0; font-size:12px;">
-            ✉ htchamba124@gmail.com
-          </a>
-          <a href="https://github.com/HEIL-TCHAMBA-NANA" target="_blank" class="tag tag-blue" style="text-align:center; padding:8px 0; font-size:12px;">
-            ↗ github.com/HEIL-TCHAMBA-NANA
-          </a>
-          <a href="assets/cv.pdf" target="_blank" class="tag tag-purple" style="text-align:center; padding:8px 0; font-size:12px;">
-            ↓ Download CV
-          </a>
-        </div>
-      </div>
-    </div>
-
   </div>
-</main>
 
-<div id="footer-wrap"></div>
-<script src="assets/js/api.js"></script>
+  <div class="panel">
+    <h2>Le projet fil rouge</h2>
+    <p>La plupart de ce que je documente ici tourne autour d'un même projet réel : <span class="hl">DREAMHOUSE-237</span>, une plateforme immobilière en microservices polyglotte — 13 dépôts, Django, Spring Boot, Flask, NestJS, déployée sur AWS EC2 Free Tier. Pas un projet jouet : de vrais bugs, de vraies failles trouvées et corrigées, de vraies décisions d'architecture assumées ou regrettées.</p>
+  </div>
+
+  <div class="panel">
+    <h2>Repères</h2>
+    <div class="kv-grid">
+      <div class="kv"><div class="k">Base</div><div class="v">Yaoundé, Cameroun</div></div>
+      <div class="kv"><div class="k">Langues</div><div class="v">Français natif, anglais professionnel</div></div>
+      <div class="kv"><div class="k">Actuellement</div><div class="v">Stage développeur @ K&B GROUP</div></div>
+      <div class="kv"><div class="k">Cap</div><div class="v">Ingénieur DevSecOps</div></div>
+    </div>
+  </div>
+</div>
+
+<div id="thread-mount"></div>
+
+<div id="ui-footer"></div>
+
 <script src="assets/js/ui.js"></script>
 <script>
-  document.getElementById('topbar').innerHTML = UI.topbar('about');
-  document.getElementById('footer-wrap').innerHTML = UI.footer();
-  document.getElementById('section-header').innerHTML = UI.sectionHeader('◒', 'About', 'who\'s behind the terminal');
-  UI.startClock();
-
-  function applyResponsive() {
-    const layout = document.getElementById('about-layout');
-    layout.style.gridTemplateColumns = window.innerWidth < 760 ? '1fr' : '1fr 320px';
-  }
-  applyResponsive();
-  window.addEventListener('resize', applyResponsive);
+  UI.mountChrome('about.html', 'profile');
+  document.getElementById('thread-mount').outerHTML = UI.thread([
+    UI.threadCard('suite logique', 'Ce que j\'ai construit avec tout ça', 'Walkthroughs techniques, déploiements réels, bugs résolus', 'walkthroughs.html', 'forward'),
+    UI.threadCard('retour', 'D\'où tout ça part', 'La page d\'accueil', 'index.html', 'back'),
+  ]);
 </script>
 </body>
 </html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notes — Heil Tchamba Nana</title>
+<meta name="description" content="Notes prises au fil de l'apprentissage — brutes, en public, avant de devenir des articles.">
+<link rel="icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://portfolio-backend-3qxp.onrender.com/static/css/main.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="ui-topbar"></div>
+<div id="ui-pipeline"></div>
+
+<section class="page-head">
+  <div class="terminal-line"><span class="prompt">$</span> tail -f notes.log</div>
+  <h1>Ce qui est <span class="accent">encore brut</span></h1>
+  <p class="lede">Notes prises au fil de l'apprentissage — pas relues cent fois, pas encore des articles. Le travail en train de se faire.</p>
+</section>
+
+<div id="list-mount" class="content" style="margin-top:44px"></div>
+
+<div id="thread-mount"></div>
+<div id="ui-footer"></div>
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/ui.js"></script>
+<script>
+  UI.mountChrome('notes.html', 'log');
+  document.getElementById('thread-mount').outerHTML = UI.thread([
+    UI.threadCard('boucle', 'Retour au début', 'L\'accueil', 'index.html', 'forward'),
+    UI.threadCard('retour', 'Les articles nés de ces notes', 'Walkthroughs', 'walkthroughs.html', 'back'),
+  ]);
+
+  const mount = document.getElementById('list-mount');
+  mount.innerHTML = UI.skeleton(3);
+
+  API.journal.all()
+    .then(items => {
+      const sorted = (items || []).sort((a, b) => new Date(b.entry_date) - new Date(a.entry_date));
+      mount.innerHTML = sorted.length
+        ? sorted.map(UI.noteEntry).join('')
+        : UI.empty('Aucune note publiée pour l\'instant.');
+    })
+    .catch(() => { mount.innerHTML = UI.error(); });
+</script>
+</body>
+</html>
