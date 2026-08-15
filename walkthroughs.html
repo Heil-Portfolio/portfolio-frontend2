@@ -22,7 +22,7 @@
   <p class="lede">Des déploiements réels, documentés dans le détail — pas des tutos théoriques, des vraies décisions et les bugs qui sont venus avec.</p>
 </section>
 
-<div id="list-mount" class="card-list"></div>
+<div id="list-mount"></div>
 
 <div id="thread-mount"></div>
 <div id="ui-footer"></div>
@@ -39,12 +39,12 @@
   const mount = document.getElementById('list-mount');
   mount.innerHTML = UI.skeleton(3);
 
-  API.walkthroughs.all()
-    .then(items => {
+  Promise.all([API.walkthroughs.all(), API.curriculum.order()])
+    .then(([items, curriculum]) => {
       const published = (items || []).filter(w => w.status === 'published');
-      mount.innerHTML = published.length
-        ? published.map(UI.walkthroughCard).join('')
-        : UI.empty('Aucun walkthrough publié pour l\'instant — revenez bientôt.');
+      if (!published.length) { mount.innerHTML = UI.empty('Aucun walkthrough publié pour l\'instant — revenez bientôt.'); return; }
+      const groups = UI.groupBySections(published, curriculum);
+      mount.innerHTML = UI.sectionsHtml(groups, UI.walkthroughCard);
     })
     .catch(() => { mount.innerHTML = UI.error(); });
 </script>

@@ -22,7 +22,7 @@
   <p class="lede">Notes prises au fil de l'apprentissage — pas relues cent fois, pas encore des articles. Le travail en train de se faire.</p>
 </section>
 
-<div id="list-mount" class="content" style="margin-top:44px"></div>
+<div id="list-mount"></div>
 
 <div id="thread-mount"></div>
 <div id="ui-footer"></div>
@@ -39,12 +39,12 @@
   const mount = document.getElementById('list-mount');
   mount.innerHTML = UI.skeleton(3);
 
-  API.journal.all()
-    .then(items => {
-      const sorted = (items || []).sort((a, b) => new Date(b.entry_date) - new Date(a.entry_date));
-      mount.innerHTML = sorted.length
-        ? sorted.map(UI.noteEntry).join('')
-        : UI.empty('Aucune note publiée pour l\'instant.');
+  Promise.all([API.journal.all(), API.curriculum.order()])
+    .then(([items, curriculum]) => {
+      if (!items || !items.length) { mount.innerHTML = UI.empty('Aucune note publiée pour l\'instant.'); return; }
+      const sorted = items.sort((a, b) => new Date(b.entry_date) - new Date(a.entry_date));
+      const groups = UI.groupBySections(sorted, curriculum);
+      mount.innerHTML = UI.sectionsHtml(groups, UI.noteEntry, 'section-stack');
     })
     .catch(() => { mount.innerHTML = UI.error(); });
 </script>

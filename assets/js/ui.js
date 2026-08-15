@@ -161,6 +161,45 @@ const UI = {
     `;
   },
 
+  // ── SECTIONS DYNAMIQUES — regroupement par tag, ordre curriculum ──
+  // Un item peut apparaître dans plusieurs sections s'il a plusieurs tags
+  // pertinents. Les items sans tag reconnu tombent dans "Autres".
+  groupBySections(items, curriculum) {
+    const groups = curriculum.map(c => ({
+      key: c.key, label: c.label, items: []
+    }));
+    const others = [];
+
+    items.forEach(item => {
+      const tags = (item.tags || []).map(t => t.toLowerCase());
+      let matched = false;
+      groups.forEach(g => {
+        if (tags.includes(g.key)) { g.items.push(item); matched = true; }
+      });
+      if (!matched) others.push(item);
+    });
+
+    const nonEmpty = groups.filter(g => g.items.length > 0);
+    if (others.length) nonEmpty.push({ key: 'autres', label: 'Autres', items: others });
+    return nonEmpty;
+  },
+
+  sectionsHtml(groups, renderItem, gridClass = 'section-grid') {
+    if (!groups.length) return UI.empty();
+    return groups.map((g, i) => `
+      <details class="section-group" ${i === 0 ? 'open' : ''}>
+        <summary class="section-summary">
+          <span class="section-caret">▾</span>
+          <span class="section-title">${g.label}</span>
+          <span class="section-count">${g.items.length}</span>
+        </summary>
+        <div class="${gridClass}" style="margin-top:16px">
+          ${g.items.map(renderItem).join('')}
+        </div>
+      </details>
+    `).join('');
+  },
+
   // ── SKELETON ───────────────────────────────────────────
   skeleton(lines = 3) {
     return `<div class="card-list">${Array.from({length: lines}, () =>

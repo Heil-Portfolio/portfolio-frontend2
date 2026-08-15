@@ -43,5 +43,8 @@ const API = (() => {
     stack: {
       status: ()         => get('/stack/'),
     },
+    curriculum: {
+      order: ()          => get('/curriculum/'),
+    },
   };
 })();
