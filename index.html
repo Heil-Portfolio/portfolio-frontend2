@@ -18,7 +18,7 @@
 
 <section class="hero">
   <div class="avatar-wrap">
-    <img src="assets/images/profile.jpg" alt="Heil Tchamba Nana" class="avatar"
+    <img src="assets/images/profile.png" alt="Heil Tchamba Nana" class="avatar"
          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
     <div class="avatar-fallback">HN</div>
     <span class="avatar-status"></span>
@@ -31,6 +31,7 @@
     <a href="walkthroughs.html" class="btn btn-primary">Lire les walkthroughs →</a>
     <a href="notes.html" class="btn btn-ghost">Voir les notes</a>
   </div>
+  <div id="hero-social-mount"></div>
 
   <div class="status-strip">
     <div class="status-cell"><div class="k">Base</div><div class="v">Yaoundé, CM</div></div>
@@ -78,6 +79,7 @@
 <script src="assets/js/ui.js"></script>
 <script>
   UI.mountChrome('index.html', 'origin');
+  document.getElementById('hero-social-mount').outerHTML = UI.socialRow(20);
   document.getElementById('thread-mount').outerHTML = UI.thread([
     UI.threadCard('suite logique', 'Ce que j\'ai construit avec tout ça', 'Walkthroughs techniques, déploiements réels, bugs résolus', 'walkthroughs.html', 'forward')
   ]);

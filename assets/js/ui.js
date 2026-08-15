@@ -81,16 +81,30 @@ const UI = {
     return `<div class="thread">${cards.join('')}</div>`;
   },
 
+  // ── SOCIAL ROW — réutilisé dans le hero et le footer ────
+  socialRow(size = 18) {
+    const icons = {
+      github: `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.4 7.86 10.93.57.1.78-.25.78-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18.92-.26 1.91-.39 2.89-.39.98 0 1.97.13 2.89.39 2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09 0 4.42-2.69 5.4-5.25 5.68.41.36.78 1.06.78 2.15 0 1.55-.01 2.8-.01 3.18 0 .3.21.66.79.55A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>`,
+      linkedin: `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.15 1.45-2.15 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45Z"/></svg>`,
+      cv: `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>`,
+      mail: `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>`,
+    };
+    return `
+      <div class="social-row">
+        <a href="https://github.com/HEIL-TCHAMBA-NANA" target="_blank" rel="noopener" class="social-link social-github">${icons.github}<span>GitHub</span></a>
+        <a href="https://www.linkedin.com/in/heil-tchamba-866111284" target="_blank" rel="noopener" class="social-link social-linkedin">${icons.linkedin}<span>LinkedIn</span></a>
+        <a href="assets/cv.pdf" target="_blank" rel="noopener" class="social-link social-cv">${icons.cv}<span>CV</span></a>
+        <a href="mailto:htchamba124@gmail.com" class="social-link social-mail">${icons.mail}<span>Contact</span></a>
+      </div>
+    `;
+  },
+
   // ── FOOTER ─────────────────────────────────────────────
   footer() {
     return `
       <footer class="footer">
         <span>heil tchamba nana — yaoundé, cameroun</span>
-        <div class="footer-links">
-          <a href="https://github.com/DREAMHOUSE-237" target="_blank">github</a>
-          <a href="mailto:htchamba124@gmail.com">contact</a>
-          <a href="assets/cv.pdf" target="_blank">cv ↓</a>
-        </div>
+        ${UI.socialRow(16)}
       </footer>
     `;
   },
