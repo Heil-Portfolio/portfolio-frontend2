@@ -66,18 +66,26 @@
       <div class="kv"><div class="k">Cap</div><div class="v">Ingénieur DevSecOps</div></div>
     </div>
   </div>
+
+  <div id="stack-mount"></div>
 </div>
 
 <div id="thread-mount"></div>
 
 <div id="ui-footer"></div>
 
+<script src="assets/js/api.js"></script>
 <script src="assets/js/ui.js"></script>
 <script>
   UI.mountChrome('index.html', 'origin');
   document.getElementById('thread-mount').outerHTML = UI.thread([
     UI.threadCard('suite logique', 'Ce que j\'ai construit avec tout ça', 'Walkthroughs techniques, déploiements réels, bugs résolus', 'walkthroughs.html', 'forward')
   ]);
+
+  const stackMount = document.getElementById('stack-mount');
+  API.stack.status()
+    .then(data => { stackMount.innerHTML = UI.stackWidget(data); })
+    .catch(() => { stackMount.innerHTML = ''; }); // discret si le backend ne répond pas
 </script>
 </body>
 </html>

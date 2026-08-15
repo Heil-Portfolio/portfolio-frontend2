@@ -40,5 +40,8 @@ const API = (() => {
     roadmap: {
       byHorizon: ()      => get('/roadmap/by_horizon/'),
     },
+    stack: {
+      status: ()         => get('/stack/'),
+    },
   };
 })();

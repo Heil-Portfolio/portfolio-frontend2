@@ -137,6 +137,30 @@ const UI = {
     `;
   },
 
+  // ── STACK STATUS WIDGET — dérivé automatiquement des tags publiés ──
+  stackWidget(data) {
+    const row = (item, kind) => `
+      <div class="stack-row">
+        <span class="stack-dot ${kind}"></span>
+        <span class="stack-service">${item.service}</span>
+        <span class="stack-status-text ${kind}">${item.status}</span>
+        ${item.count ? `<span class="stack-evidence">— ${item.count} ${item.unit}${item.count > 1 ? 's' : ''}</span>` : ''}
+      </div>`;
+
+    const rows = [
+      ...(data.active || []).map(i => row(i, 'mastered')),
+      ...(data.learning || []).map(i => row(i, 'learning')),
+      ...(data.queued || []).map(i => row(i, 'queued')),
+    ].join('');
+
+    return `
+      <div class="stack-widget">
+        <div class="stack-cmd"><span class="prompt">$</span> systemctl status stack</div>
+        ${rows}
+      </div>
+    `;
+  },
+
   // ── SKELETON ───────────────────────────────────────────
   skeleton(lines = 3) {
     return `<div class="card-list">${Array.from({length: lines}, () =>
