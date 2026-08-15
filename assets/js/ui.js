@@ -161,12 +161,13 @@ const UI = {
     `;
   },
 
-  // ── SECTIONS DYNAMIQUES — regroupement par tag, ordre curriculum ──
-  // Un item peut apparaître dans plusieurs sections s'il a plusieurs tags
-  // pertinents. Les items sans tag reconnu tombent dans "Autres".
+  // ── SECTIONS DYNAMIQUES — regroupement par synonymes, ordre curriculum ──
+  // curriculum = [{key, label, synonyms:[...]}]. Un item peut apparaître
+  // dans plusieurs sections s'il a des tags pertinents pour plusieurs
+  // sujets. À l'intérieur d'une section, sous-groupé par tag précis.
   groupBySections(items, curriculum) {
     const groups = curriculum.map(c => ({
-      key: c.key, label: c.label, items: []
+      key: c.key, label: c.label, synonyms: c.synonyms, items: [], subgroups: {}
     }));
     const others = [];
 
@@ -174,30 +175,49 @@ const UI = {
       const tags = (item.tags || []).map(t => t.toLowerCase());
       let matched = false;
       groups.forEach(g => {
-        if (tags.includes(g.key)) { g.items.push(item); matched = true; }
+        const hit = g.synonyms.find(s => tags.includes(s));
+        if (hit) {
+          matched = true;
+          g.items.push(item);
+          const subKey = hit.charAt(0).toUpperCase() + hit.slice(1);
+          (g.subgroups[subKey] = g.subgroups[subKey] || []).push(item);
+        }
       });
       if (!matched) others.push(item);
     });
 
     const nonEmpty = groups.filter(g => g.items.length > 0);
-    if (others.length) nonEmpty.push({ key: 'autres', label: 'Autres', items: others });
+    if (others.length) nonEmpty.push({ key: 'autres', label: 'Autres', items: others, subgroups: null });
     return nonEmpty;
   },
 
   sectionsHtml(groups, renderItem, gridClass = 'section-grid') {
     if (!groups.length) return UI.empty();
-    return groups.map((g, i) => `
-      <details class="section-group" ${i === 0 ? 'open' : ''}>
-        <summary class="section-summary">
-          <span class="section-caret">▾</span>
-          <span class="section-title">${g.label}</span>
-          <span class="section-count">${g.items.length}</span>
-        </summary>
-        <div class="${gridClass}" style="margin-top:16px">
-          ${g.items.map(renderItem).join('')}
-        </div>
-      </details>
-    `).join('');
+    return groups.map((g, i) => {
+      // Sous-groupes seulement si plus d'un tag précis distinct dans la section
+      const subKeys = g.subgroups ? Object.keys(g.subgroups) : [];
+      const useSub = subKeys.length > 1;
+
+      const body = useSub
+        ? subKeys.map(sk => `
+            <div class="subgroup-label">${sk} <span class="subgroup-count">${g.subgroups[sk].length}</span></div>
+            <div class="${gridClass}" style="margin-bottom:20px">
+              ${g.subgroups[sk].map(renderItem).join('')}
+            </div>
+          `).join('')
+        : `<div class="${gridClass}">${g.items.map(renderItem).join('')}</div>`;
+
+      return `
+        <details class="section-group" ${i === 0 ? 'open' : ''}>
+          <summary class="section-summary">
+            <span class="section-caret">▾</span>
+            <span class="section-title">${g.label}</span>
+            <span class="section-count">${g.items.length}</span>
+          </summary>
+          <div style="margin-top:16px">${body}</div>
+        </details>
+      `;
+    }).join('');
   },
 
   // ── SKELETON ───────────────────────────────────────────
