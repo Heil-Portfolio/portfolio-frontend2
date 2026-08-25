@@ -259,6 +259,17 @@ const UI = {
     `;
   },
 
+  // ── CV LINK — n'apparaît que si assets/cv.pdf existe réellement ─
+  // (même principe que le fallback avatar : jamais de lien mort visible,
+  // auto-réparé dès que le fichier est déposé, sans retouche de code)
+  checkCvLink() {
+    fetch('assets/cv.pdf', { method: 'HEAD' })
+      .then(res => { if (!res.ok) throw new Error('cv missing'); })
+      .catch(() => {
+        document.querySelectorAll('.social-cv').forEach(el => { el.style.display = 'none'; });
+      });
+  },
+
   // ── MOUNT HELPERS ────────────────────────────────────────
   mountChrome(activePage, pipelineStage) {
     const topbarEl = document.getElementById('ui-topbar');
@@ -267,5 +278,6 @@ const UI = {
     if (topbarEl) topbarEl.outerHTML = UI.topbar(activePage);
     if (pipelineEl) pipelineEl.outerHTML = UI.pipeline(pipelineStage);
     if (footerEl) footerEl.outerHTML = UI.footer();
+    UI.checkCvLink();
   },
 };

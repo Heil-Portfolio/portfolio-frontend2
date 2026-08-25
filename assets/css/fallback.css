@@ -1,0 +1,81 @@
+/* fallback.css — filet de sécurité si le CSS distant (backend) ne charge pas.
+   Volontairement générique : pas une copie du design réel, juste de quoi
+   rester lisible. main.css, chargé après, écrase ces règles quand il répond. */
+
+:root {
+  color-scheme: light dark;
+  --fb-bg: #ffffff;
+  --fb-fg: #1a1a1a;
+  --fb-muted: #555555;
+  --fb-link: #2563eb;
+  --fb-border: #dddddd;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fb-bg: #12141a;
+    --fb-fg: #e8e8e8;
+    --fb-muted: #9a9a9a;
+    --fb-link: #7aa2ff;
+    --fb-border: #2a2d36;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--fb-bg);
+  color: var(--fb-fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+}
+
+body > * {
+  box-sizing: border-box;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+h1, h2, h3 {
+  line-height: 1.25;
+  margin-top: 1.4em;
+  margin-bottom: 0.5em;
+}
+
+p {
+  color: var(--fb-fg);
+}
+
+a {
+  color: var(--fb-link);
+}
+
+.lede, .sub, p.lede {
+  color: var(--fb-muted);
+}
+
+nav a, .topbar a {
+  color: var(--fb-fg);
+  text-decoration: none;
+  margin-right: 16px;
+}
+
+.tag, .badge, .log-tag, .status-cell, .kv, .card, .panel, .thread-card, .stack-widget {
+  border: 1px solid var(--fb-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.btn {
+  display: inline-block;
+  padding: 8px 16px;
+  border: 1px solid var(--fb-border);
+  border-radius: 6px;
+  color: var(--fb-fg);
+  text-decoration: none;
+  margin-right: 10px;
+}

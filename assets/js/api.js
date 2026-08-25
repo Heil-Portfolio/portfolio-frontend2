@@ -6,15 +6,81 @@ const API = (() => {
     ? 'http://localhost:8000/api'
     : 'https://portfolio-backend-3qxp.onrender.com/api'; // ← remplacer en prod
 
-  async function get(endpoint) {
+  // Cache résilient : si le backend (Render) est endormi ou en panne, on sert
+  // la dernière réponse connue plutôt que de bloquer/casser l'affichage.
+  const CACHE_PREFIX = 'api_cache:';
+  const STALE_TIMEOUT_MS = 5000;
+  const MAX_CACHE_AGE_MS = 30 * 24 * 60 * 60 * 1000; // 30 jours
+
+  function cacheGet(endpoint) {
+    try {
+      const raw = localStorage.getItem(CACHE_PREFIX + endpoint);
+      if (!raw) return null;
+      const entry = JSON.parse(raw);
+      if (Date.now() - entry.ts > MAX_CACHE_AGE_MS) return null;
+      return entry;
+    } catch {
+      return null;
+    }
+  }
+
+  function cacheSet(endpoint, data) {
+    try {
+      localStorage.setItem(CACHE_PREFIX + endpoint, JSON.stringify({ data, ts: Date.now() }));
+    } catch {
+      // storage indisponible (navigation privée, quota...) : on continue sans cache
+    }
+  }
+
+  async function fetchFresh(endpoint) {
     const res = await fetch(`${BASE_URL}${endpoint}`);
     if (!res.ok) throw new Error(`API error ${res.status}: ${endpoint}`);
     const data = await res.json();
     // DRF pagine les listes ({count, next, previous, results}) : on déballe results
-    if (data && typeof data === 'object' && !Array.isArray(data) && Array.isArray(data.results)) {
-      return data.results;
+    const unwrapped = (data && typeof data === 'object' && !Array.isArray(data) && Array.isArray(data.results))
+      ? data.results
+      : data;
+    cacheSet(endpoint, unwrapped);
+    return unwrapped;
+  }
+
+  async function get(endpoint) {
+    const cached = cacheGet(endpoint);
+
+    if (!cached) {
+      // Pas de filet : on attend le réseau normalement (erreur propagée si ça échoue).
+      return fetchFresh(endpoint);
     }
-    return data;
+
+    // On a un filet : ne jamais faire attendre l'utilisateur plus de STALE_TIMEOUT_MS,
+    // et retomber sur le cache aussi bien en cas de lenteur que d'échec réseau immédiat.
+    // Si le réseau finit par répondre après coup, le cache est mis à jour en tâche de
+    // fond pour la prochaine visite — pas de re-render forcé ici.
+    return new Promise(resolve => {
+      let settled = false;
+      const timer = setTimeout(() => {
+        if (!settled) {
+          settled = true;
+          console.warn(`[API] ${endpoint} : pas de réponse sous ${STALE_TIMEOUT_MS}ms, contenu en cache servi (du ${new Date(cached.ts).toLocaleString('fr-FR')}). La requête continue en tâche de fond.`);
+          resolve(cached.data);
+        }
+      }, STALE_TIMEOUT_MS);
+
+      fetchFresh(endpoint).then(data => {
+        if (!settled) { settled = true; clearTimeout(timer); resolve(data); }
+      }).catch(err => {
+        if (!settled) {
+          settled = true;
+          clearTimeout(timer);
+          console.warn(`[API] ${endpoint} : échec réseau, contenu en cache servi (du ${new Date(cached.ts).toLocaleString('fr-FR')}).`, err);
+          resolve(cached.data);
+        } else {
+          // Le fallback avait déjà été servi via le timeout ; on log quand même
+          // l'échec du refresh en tâche de fond pour qu'il reste visible en debug.
+          console.warn(`[API] ${endpoint} : le rafraîchissement en tâche de fond a aussi échoué, cache inchangé.`, err);
+        }
+      });
+    });
   }
 
   return {
