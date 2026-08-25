@@ -2,9 +2,12 @@
 // Modifier BASE_URL selon ton environnement
 
 const API = (() => {
+  // En prod, chemin relatif : Vercel proxifie /api/* vers Render côté serveur
+  // (voir vercel.json) pour que le navigateur du visiteur ne contacte jamais
+  // directement onrender.com — certains FAI bloquent ce domaine côté réseau.
   const BASE_URL = window.location.hostname === 'localhost'
     ? 'http://localhost:8000/api'
-    : 'https://portfolio-backend-3qxp.onrender.com/api'; // ← remplacer en prod
+    : '/api';
 
   // Cache résilient : si le backend (Render) est endormi ou en panne, on sert
   // la dernière réponse connue plutôt que de bloquer/casser l'affichage.
