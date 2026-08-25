@@ -2,14 +2,16 @@
 // Modifier BASE_URL selon ton environnement
 
 const API = (() => {
-  // En prod, chemin relatif : Vercel proxifie /backend-api/* vers Render côté
+  // En prod, chemin relatif : Vercel proxifie /backend/* vers Render côté
   // serveur (voir vercel.json) pour que le navigateur du visiteur ne contacte
   // jamais directement onrender.com — certains FAI bloquent ce domaine côté
-  // réseau. Préfixe volontairement différent de /api/*, réservé par Vercel
-  // pour ses propres Serverless Functions (un rewrite dessus est ignoré).
+  // réseau. Le préfixe évite tout mot "api" dans le chemin : /api/* est
+  // réservé par Vercel (Serverless Functions), et /backend-api/* échouait
+  // aussi — Vercel semble aussi réserver "api" comme mot isolé (séparé par
+  // un tiret), pas seulement comme préfixe exact /api/.
   const BASE_URL = window.location.hostname === 'localhost'
     ? 'http://localhost:8000/api'
-    : '/backend-api';
+    : '/backend';
 
   // Cache résilient : si le backend (Render) est endormi ou en panne, on sert
   // la dernière réponse connue plutôt que de bloquer/casser l'affichage.
